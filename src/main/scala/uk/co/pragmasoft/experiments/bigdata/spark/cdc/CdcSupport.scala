@@ -1,6 +1,7 @@
 package uk.co.pragmasoft.experiments.bigdata.spark.cdc
 
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK_SER
 
 import scala.reflect.ClassTag
 
@@ -9,8 +10,21 @@ trait CdcSupport {
   import Cdc._
 
   def computeCdc[Key, Value](keyExtractor: Value => Key)(newSnapshot: RDD[Value], previousSnapshot: RDD[Value])(implicit kt: ClassTag[Key], vt: ClassTag[Value]): RDD[Cdc[Value]] = {
-    val newByKey = newSnapshot.filter( _ != null).keyBy( keyExtractor ).persist()
-    val previousByKey = previousSnapshot.filter( _ != null).keyBy( keyExtractor ).persist()
+
+    println( s"New snapshot $newSnapshot")
+    println( s"Previous snapshot $previousSnapshot")
+
+    val newByKey =
+      newSnapshot
+        .filter( _ != null)
+        .keyBy( keyExtractor )
+        .persist(MEMORY_AND_DISK_SER)
+
+    val previousByKey =
+      previousSnapshot
+        .filter( _ != null)
+        .keyBy( keyExtractor )
+        .persist(MEMORY_AND_DISK_SER)
 
     val deletedRecords = extractDeletedRecords(newByKey, previousByKey)
 

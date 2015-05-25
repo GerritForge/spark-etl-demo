@@ -1,12 +1,10 @@
 package uk.co.pragmasoft.experiments.bigdata.spark.dbimport
 
-import java.io.File
 
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
 import scopt.OptionParser
 import uk.co.pragmasoft.experiments.bigdata.spark.cdc.Cdc._
-import uk.co.pragmasoft.experiments.bigdata.spark.cdc.SampleCDC._
 import uk.co.pragmasoft.experiments.bigdata.spark.{CSVOperations, CustomerData}
 import uk.co.pragmasoft.experiments.bigdata.spark.cdc.CdcSupport
 
@@ -18,7 +16,7 @@ object AppParams {
                      dbName: String = "xe"
                    )
 
-  val optionParser = new OptionParser[Config]("EtlDumper") {
+  val optionParser = new OptionParser[Config]("CDC DB Import") {
     opt[String]("rootPath") action { (arg, config) =>
       config.copy(fileRootPath = arg)
     } text "Local file path"
@@ -54,8 +52,6 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
     val baseConf =
       new SparkConf()
         .setAppName("SampleDbIngestionWithCDC")
-        .set("spark.executor.extraClassPath", "/Users/stefano/projects/spark-experiments/extra-libs/ojdbc6.jar" )
-        .set("spark.driver.extraClassPath", "/Users/stefano/projects/spark-experiments/extra-libs/ojdbc6.jar" )
 
     if( (args.length >= 1) && (args(0) == "local") ) {
       baseConf
@@ -83,7 +79,7 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
 
   import uk.co.pragmasoft.experiments.bigdata.spark.cdc.CustomerOperations._
 
-  val newSnapshot = customerTableDataFrame
+  val newCustomerData = customerTableDataFrame
     .map { row => CustomerData(row.getString(0),row.getString(1), Option(row.getString(2))) }
  
   val previousSnapshot =
@@ -95,5 +91,6 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
     .map( customerCdc => printAsStringArray(customerCdc)(CustomerData.asStringArray) )
     .addHeader(sc)( "customerId", "name", "address", "cdc" )
     .writeAsCsv( filePath("out/cdc.csv") )
+
 
 }
