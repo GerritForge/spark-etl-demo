@@ -18,7 +18,6 @@ class CdcSupportTest extends FlatSpec with Matchers with SparkTestSupport with C
     val deletedRecords = extractDeletedRecords(newSnapshot, previousSnapshot)
 
     deletedRecords.collect().toList should be ( List(deleted(Record(2, "value 2"))) )
-
   }
 
   behavior of "extractNewAndUpdated"

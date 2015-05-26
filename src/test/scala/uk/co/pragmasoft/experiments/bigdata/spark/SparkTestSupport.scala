@@ -1,7 +1,7 @@
 package uk.co.pragmasoft.experiments.bigdata.spark
 
 import org.apache.commons.lang.RandomStringUtils
-import org.apache.spark.SparkContext
+import org.apache.spark.{SparkConf, SparkContext}
 
 trait SparkTestSupport {
 

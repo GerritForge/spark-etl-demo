@@ -1,8 +1,5 @@
 package uk.co.pragmasoft.experiments.bigdata.spark.cdc
 
-/**
- * Created by stefano on 26/04/15.
- */
 trait Cdc[+T] {
   def operation: String
   def record: T

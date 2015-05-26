@@ -13,10 +13,24 @@ val sparkStreaming = "org.apache.spark" %% "spark-streaming" % sparkVersion
 val commonsIo = "commons-io"              %  "commons-io"           % "2.4"
 val scopt = "com.github.scopt"        %% "scopt"                % "3.3.0"
 
+//val scalaLikeJdbc = Seq(
+//  "org.scalikejdbc" %% "scalikejdbc"       % "2.2.6",
+//  "com.h2database"  %  "h2"                % "1.4.187",
+//  "ch.qos.logback"  %  "logback-classic"   % "1.1.3"
+//)
+
+val slickVersion: String = "3.0.0"
+val slick = Seq(
+  "com.typesafe.slick" %% "slick" % slickVersion,
+  "com.typesafe.slick" %% "slick-extensions" % slickVersion,
+  "org.slf4j" % "slf4j-nop" % "1.6.4"
+)
+
 resolvers ++= Seq(
   Resolver.sonatypeRepo("release"),
   Resolver.sonatypeRepo("public"),
-  Resolver.mavenLocal
+  Resolver.mavenLocal,
+  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/"
 )
 
 libraryDependencies ++=
@@ -25,5 +39,8 @@ libraryDependencies ++=
     "org.scalatest" %% "scalatest" % "2.2.4" % "test",
     commonsIo,
     scopt
-  )
+  ) ++
+  slick
 
+// Errors creating spark contexts otherwise
+parallelExecution in Test := false
