@@ -48,7 +48,10 @@ docker pull alexeiled/docker-oracle-xe-11g
 and launch it with 
 
 ```bash
-docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080 alexeiled/docker-oracle-xe-11g
+docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080 
+    -v /Users/stefano/projects/spark-experiments/data:/test/data 
+    -v /Users/stefano/projects/spark-experiments/src/main/resources:/test/cfg 
+    alexeiled/docker-oracle-xe-11g
 ```
 
 ### Create the Customer Table 
@@ -61,6 +64,13 @@ I'm using SQLDeveloper connected with the configuration:
 * Port: 49161
 * SSID: xe
 * Username/pwd: system/oracle
+
+You can also create the table using the command line:
+
+```bash
+docker exec -i -t <docker-id>  
+    bash -c 'export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe;export ORACLE_SID=XE;echo exit |  /u01/app/oracle/product/11.2.0/xe/bin/sqlplus system/oracle  @/test/cfg/OracleDB.sql'
+```
 
 ### Enabling Spark to Access Oracle
 
@@ -80,6 +90,8 @@ You can then submit the assembly jar to the cluster (in this example to a standa
 spark-submit 
     --master spark://galarragas.local:7077 
     --class uk.co.pragmasoft.experiments.bigdata.spark.dbimport.CustomerCDCDataBaseImporter 
+    -v /Users/stefano/projects/spark-experiments/data:/test/data 
+    -v /Users/stefano/projects/spark-experiments/src/main/resources:/test/cfg
     SparkExperiments-assembly-1.0.jar 
     --rootPath file:/Users/stefano/projects/spark-experiments/data/cdc
 ```

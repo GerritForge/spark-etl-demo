@@ -13,4 +13,10 @@ object CustomerOperations {
 
     def extractInvalidRecords : RDD[LineWithErrorDescription] = parseAsCustomers.filter( _.isLeft ).map( _.left.get )
   }
+
+  implicit class WithExtractedCustomers(val rdd: RDD[ Either[LineWithErrorDescription, CustomerData] ]) extends AnyVal {
+    def extractValid: RDD[CustomerData] = rdd.filter( _.isRight ).map( _.right.get )
+
+    def extractInvalid : RDD[LineWithErrorDescription] = rdd.filter( _.isLeft ).map( _.left.get )
+  }
 }

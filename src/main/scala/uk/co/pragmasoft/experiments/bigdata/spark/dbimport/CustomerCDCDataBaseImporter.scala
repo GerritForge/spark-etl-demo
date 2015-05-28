@@ -66,6 +66,7 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
   val dbConnectionUrl = s"jdbc:oracle:thin:$dbServerConnection/$dbName"
 
   println(s"Connecting to '$dbConnectionUrl'")
+  println(s"Reading from '$fileRootPath'")
 
   val customerTableDataFrame =
     sqlContext
@@ -81,11 +82,22 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
 
   val newCustomerData = customerTableDataFrame
     .map { row => CustomerData(row.getString(0),row.getString(1), Option(row.getString(2))) }
- 
-  val previousSnapshot =
+
+  val prevSnapshotBeforeValidation =
     sc.textFile( filePath("fullData.csv") )
       .extractCSV( skipHeader = true )
-      .extractValidCustomers
+      .parseAsCustomers
+      .cache()
+
+
+  val previousSnapshot =
+    prevSnapshotBeforeValidation
+      .extractValid
+
+  prevSnapshotBeforeValidation
+    .extractInvalid
+    .map( lineWithErrorDescription => s"""${lineWithErrorDescription._1}: errors: '${lineWithErrorDescription._2.mkString(",")}'""" )
+    .saveAsTextFile(filePath("out/errors.txt"))
 
   computeCdc( { customer: CustomerData => customer.customerId } )(newCustomerData, previousSnapshot)
     .map( customerCdc => printAsStringArray(customerCdc)(CustomerData.asStringArray) )

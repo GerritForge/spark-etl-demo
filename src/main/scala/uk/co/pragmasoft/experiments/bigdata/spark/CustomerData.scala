@@ -7,9 +7,9 @@ object CustomerData {
 
    def fromStringArray(values: Array[String]): Either[LineWithErrorDescription, CustomerData] = {
      if (values.length > 2) {
-       Left( (s"Invalid number of tokens expected at least two", values) )
-     } else {
        Right( CustomerData(values(0), values(1), if(values.length > 2) Some(values(2)) else None ) )
+     } else {
+       Left( (s"Invalid number of tokens expected at least two", values) )
      }
    }
 
