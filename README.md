@@ -50,7 +50,7 @@ and launch it with
 ```bash
 docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080 
     -v /Users/stefano/projects/spark-experiments/data:/test/data 
-    -v /Users/stefano/projects/spark-experiments/src/main/resources:/test/cfg 
+    -v /Users/stefano/projects/spark-experiments/src/test/resources:/test/cfg 
     alexeiled/docker-oracle-xe-11g
 ```
 
@@ -90,8 +90,6 @@ You can then submit the assembly jar to the cluster (in this example to a standa
 spark-submit 
     --master spark://galarragas.local:7077 
     --class uk.co.pragmasoft.experiments.bigdata.spark.dbimport.CustomerCDCDataBaseImporter 
-    -v /Users/stefano/projects/spark-experiments/data:/test/data 
-    -v /Users/stefano/projects/spark-experiments/src/main/resources:/test/cfg
     SparkExperiments-assembly-1.0.jar 
     --rootPath file:/Users/stefano/projects/spark-experiments/data/cdc
 ```
