@@ -54,6 +54,8 @@ docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080
     alexeiled/docker-oracle-xe-11g
 ```
 
+You can use the script `src/test/scripts/start-db-docker.sh`
+
 ### Create the Customer Table 
 
 The file `src/main/resources/OracleDB.sql` contains the definition of the Customer table and the generation of some sample data. 
@@ -71,6 +73,8 @@ You can also create the table using the command line:
 docker exec -i -t <docker-id>  
     bash -c 'export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe;export ORACLE_SID=XE;echo exit |  /u01/app/oracle/product/11.2.0/xe/bin/sqlplus system/oracle  @/test/cfg/OracleDB.sql'
 ```
+
+You can use the script `src/test/scripts/init-db-docker.sh` and stop with `src/test/scripts/stop-db-docker.sh`
 
 ### Enabling Spark to Access Oracle
 
@@ -95,5 +99,6 @@ spark-submit
 ```
  
 Remember to build the jar with `sbt assembly` and not with just `sbt package`.  
+
 
 
