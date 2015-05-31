@@ -1,6 +1,6 @@
 # Demo of an ETL Spark Job
 
-Collection of some experiment I'm doing on Spark code in Scala
+Just some simple Spark code to be built using the demo infrastructure and process
 
 ## CDC
 
