@@ -6,9 +6,8 @@ else
     ROOT_DIR=$1
 fi
 
-docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080 \
-    -v $ROOT_DIR/data:/test/data \
-    -v $ROOT_DIR/src/test/resources:/test/cfg \
-    alexeiled/docker-oracle-xe-11g > oracle.docker.id
+echo "Root dir is $ROOT_DIR"
+
+docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080  -v $ROOT_DIR/data:/test/data  -v $ROOT_DIR/src/test/resources:/test/cfg  alexeiled/docker-oracle-xe-11g > oracle.docker.id
 
 
