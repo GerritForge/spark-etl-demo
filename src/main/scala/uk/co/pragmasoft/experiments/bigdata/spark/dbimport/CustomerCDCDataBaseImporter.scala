@@ -44,8 +44,7 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
   val parsedArgs = parsedArgsMaybe.get
   
   import parsedArgs._
-  
-  
+
   def filePath(file: String) = s"$fileRootPath/$file"
 
   val sparkConf =  {
