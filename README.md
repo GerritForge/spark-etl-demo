@@ -4,14 +4,14 @@ Just some simple Spark code to be built using the demo infrastructure and proces
 
 ## CDC
 
-Implementation of a file based Change Data Capture flow. The flow can be run in local mode with default arguments running 
+Implementation of a file based Change Data Capture flow. The flow can be run in local mode with default arguments running
  class `uk.co.pragmasoft.experiments.bigdata.spark.cdc.SampleCDC` or submitted into the spark cluster using the command line
- 
+
  ```
- spark-submit 
-    --master <master> 
-    spark-experiments_2.10-1.0.jar 
-    --class uk.co.pragmasoft.experiments.bigdata.spark.cdc.SampleCDC 
+ spark-submit
+    --master <master>
+    spark-experiments_2.10-1.0.jar
+    --class uk.co.pragmasoft.experiments.bigdata.spark.cdc.SampleCDC
     <root path to CDC files>
  ```
 
@@ -33,19 +33,19 @@ The main class is `uk.co.pragmasoft.experiments.bigdata.spark.dbimport.CustomCDC
 
 ### Testing the DB Import
 
-To test the application you can follow the procedure documented here: 
+To test the application you can follow the procedure documented here:
 
 ### Providing an Oracle Instance
 
 The execution is assuming to have an Oracle instance available. I'm testing it using an oracle Docker instance. I'm using `alexeiled/docker-oracle-xe-11g:latest`.
 
-You can install the instance with 
+You can install the instance with
 
 ```bash
 docker pull alexeiled/docker-oracle-xe-11g
 ```
 
-and launch it with 
+and launch it with
 
 ```bash
 docker run -d -p 49160:22 -p 49161:1521 -p 49162:8080 
@@ -98,7 +98,8 @@ spark-submit
     --rootPath file:/Users/stefano/projects/spark-experiments/data/cdc
 ```
  
-Remember to build the jar with `sbt assembly` and not with just `sbt package`.  
+Remember to build the jar with `sbt assembly` and not with just `sbt package`.
 
+CHANGE TO VERIFY GERRIT INTEGRATION
 
 
