@@ -44,7 +44,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Check if there is any processed record with error"
-`$CAT $TEST_ROOT_PATH_URL/out/errors.txt/part* > errors.txt`
+$CAT $TEST_ROOT_PATH/out/errors.txt/part* > errors.txt
 ERROR_COUNT=`wc -l errors.txt`
 
 if [ "$ERROR_COUNT" -gt 0 ]; then
