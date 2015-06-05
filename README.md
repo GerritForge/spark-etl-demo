@@ -102,3 +102,5 @@ Remember to build the jar with `sbt assembly` and not with just `sbt package`.
 
 
 
+# Further comments from Stefano ...
+hi from git-review
