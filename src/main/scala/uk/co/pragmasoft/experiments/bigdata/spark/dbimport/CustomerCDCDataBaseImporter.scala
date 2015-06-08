@@ -62,7 +62,7 @@ object CustomerCDCDataBaseImporter extends App with CdcSupport {
   val sc = new SparkContext(sparkConf)
   val sqlContext = new SQLContext(sc)
 
-  val dbConnectionUrl = s"jdbc:oracle:thin:$dbServerConnection/$dbName"
+  val dbConnectionUrl = s"jdbc:oracle:thin:$dbServerConnection:$dbName"
 
   println(s"Connecting to '$dbConnectionUrl'")
   println(s"Reading from '$fileRootPath'")
