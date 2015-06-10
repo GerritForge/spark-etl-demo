@@ -11,7 +11,7 @@ echo $ORACLE_DB
 echo "Root dir is $ROOT_DIR"
 
 SPARK_HOME=/usr/lib/spark
-SPARK_MASTER=local #spark://localhost:7077
+SPARK_MASTER=spark://$(hostname):7077
 TEST_ROOT_PATH=$ROOT_DIR/data/cdc
 TEST_ROOT_PATH_URL=data/cdc
 JAR_LOCATION=$ROOT_DIR/target/scala-2.10/SparkExperiments-assembly-1.0.jar
@@ -36,7 +36,6 @@ $SPARK_HOME/bin/spark-submit \
     --class uk.co.pragmasoft.experiments.bigdata.spark.dbimport.CustomerCDCDataBaseImporter \
     $JAR_LOCATION \
     --dbServerConnection "system/oracle@$ORACLE_DB:1521"
-#    --rootPath $TEST_ROOT_PATH_URL
 
 
 if [ $? -ne 0 ]; then
