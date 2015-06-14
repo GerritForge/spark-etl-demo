@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [ -z ${1+x} ]; then
     ROOT_DIR=$PWD
 else
@@ -13,28 +15,33 @@ echo "Root dir is $ROOT_DIR"
 SPARK_HOME=/usr/lib/spark
 SPARK_MASTER=spark://$(hostname):7077
 TEST_ROOT_PATH=$ROOT_DIR/data/cdc
-TEST_ROOT_PATH_URL=data/cdc
+TEST_ROOT_PATH_URL=hdfs://$TEST_ROOT_PATH
 JAR_LOCATION=$ROOT_DIR/target/scala-2.10/SparkExperiments-assembly-1.0.jar
 
-RMDIR="rm -rf"
-#RMDIR=hdfs dfs -rm -r
+#RMDIR="rm -rf"
+RMDIR="hdfs dfs -rm -r"
 
 #CAT=cat
 CAT="hadoop fs -cat"
 
+(hadoop fs -test -d $ROOT_DIR/data/out && $RMDIR $ROOT_DIR/data/out) || true
+
+hadoop fs -mkdir -p $ROOT_DIR/data
+
 echo "Copying data to HDFS"
-HADOOP_CMD="hadoop fs -copyFromLocal $ROOT_DIR/data"
+HADOOP_CMD="hadoop fs -copyFromLocal $ROOT_DIR/data $ROOT_DIR"
 echo $HADOOP_CMD
 `$HADOOP_CMD`
 
-#echo "Cleaning output folder"
-#`$RMDIR $TEST_ROOT_PATH/out/*`
+echo "Content of HDFS data directory"
+hdfs dfs -ls $ROOT_DIR/data
 
 echo "Submit CDC importer job"
 $SPARK_HOME/bin/spark-submit \
     --master $SPARK_MASTER \
     --class uk.co.pragmasoft.experiments.bigdata.spark.dbimport.CustomerCDCDataBaseImporter \
     $JAR_LOCATION \
+    --rootPath $TEST_ROOT_PATH_URL \
     --dbServerConnection "system/oracle@$ORACLE_DB:1521"
 
 
@@ -44,8 +51,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Check if there is any processed record with error"
-$CAT $TEST_ROOT_PATH/out/errors.txt/part* > errors.txt
-ERROR_COUNT=`wc -l errors.txt`
+$CAT $TEST_ROOT_PATH_URL/out/errors.txt/part* > errors.txt
+ERROR_COUNT=`cat errors.txt | wc -l`
 
 if [ "$ERROR_COUNT" -gt 0 ]; then
     echo "Spark job generated error lines"
@@ -59,7 +66,7 @@ cat > expected-out.csv <<- EOM
 10001,Stefano,New Home,U
 10003,Tiago,Another address,I
 10004,Antonios,home,I
-10104,To be Deleted,Old Home FAIL THE TEST,D
+10104,To be Deleted,Old Home,D
 customerId,name,address,cdc
 EOM
 
