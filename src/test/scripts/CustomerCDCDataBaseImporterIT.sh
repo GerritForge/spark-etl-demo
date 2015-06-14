@@ -59,7 +59,7 @@ cat > expected-out.csv <<- EOM
 10001,Stefano,New Home,U
 10003,Tiago,Another address,I
 10004,Antonios,home,I
-10104,To be Deleted,Old Home,D
+10104,To be Deleted,Old Home FAIL THE TEST,D
 customerId,name,address,cdc
 EOM
 
