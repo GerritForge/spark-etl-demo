@@ -28,5 +28,7 @@ libraryDependencies ++=
     scopt
   )
 
+test in assembly := {}
+
 // Errors creating spark contexts otherwise
 parallelExecution in Test := false
