@@ -8,6 +8,24 @@ else
     ROOT_DIR=$1
 fi
 
+set +x
+echo "Waiting for Spark to startup"
+waitCount=0
+while ! echo exit | nc $HOSTNAME 7077; do
+    waitCount=$((waitCount + 1))
+
+    if [ $waitCount -gt 40 ]; then
+        echo "Spark instance didn't startup properly"
+        exit -1
+    fi
+
+    sleep 5
+    echo "."
+done
+echo "Ready"
+set -x
+
+
 ORACLE_DB=$2
 echo $ORACLE_DB
 echo "Root dir is $ROOT_DIR"
