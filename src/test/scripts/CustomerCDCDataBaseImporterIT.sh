@@ -65,7 +65,7 @@ fi
 cat > expected-out.csv <<- EOM
 10001,Stefano,New Home,U
 10003,Tiago,Another address,I
-10004,Antonios,home,I
+10004,Antonios,home WRONG VALUE,I
 10104,To be Deleted,Old Home,D
 customerId,name,address,cdc
 EOM
