@@ -93,7 +93,7 @@ echo "Comparing output with expected out"
 diff out.csv expected-out.csv
 
 if [ $? -ne 0 ]; then
-    echo "!!! Output of spark job different than expected, see output above for details"
+    echo "!!! Output of spark job different than expected, see output above for details !!!"
     exit 1
 fi
 
