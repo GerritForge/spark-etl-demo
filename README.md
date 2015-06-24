@@ -100,4 +100,3 @@ spark-submit
  
 Remember to build the jar with `sbt assembly` and not with just `sbt package`.
 
-THIS IS A VERY SIMPLE CHANGE
