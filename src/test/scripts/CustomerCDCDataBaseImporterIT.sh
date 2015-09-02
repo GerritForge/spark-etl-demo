@@ -88,6 +88,8 @@ cat > expected-out.csv <<- EOM
 customerId,name,address,cdc
 EOM
 
+echo "problem fixed"
+
 echo "Comparing output with expected out"
 
 diff out.csv expected-out.csv
